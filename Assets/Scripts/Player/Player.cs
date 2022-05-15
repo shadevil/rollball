@@ -9,8 +9,10 @@ public class Player : MonoBehaviour
     [SerializeField] private Joystick joystick;
     private Rigidbody ballRb;
     private AudioSource audioSource;
-    //[SerializeField] private AudioClip roll;
-    //[SerializeField] private AudioClip fall;
+    private float hor = 0;
+    private bool rollSoundEnable = false;
+    [SerializeField] private AudioClip roll;
+    [SerializeField] private AudioClip fall;
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -19,17 +21,39 @@ public class Player : MonoBehaviour
     }
     private void Update()
     {
-        float hor = 0;
-        float horJoystick = joystick.Horizontal;
-        float horMouse = Input.GetAxis("Horizontal");
-        if (horJoystick != 0) hor = horJoystick;
-        if (horMouse != 0) hor = horMouse;
-        else audioSource.Stop();
-        ballRb.AddForce(hor * speed * Time.deltaTime, 0, 0);
+        if (Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            hor = Input.GetAxis("Horizontal");          
+        }
+        if (Application.platform == RuntimePlatform.Android) 
+        {
+            hor = joystick.Horizontal;
+        }
+        if (hor != 0)
+        {
+            ballRb.AddForce(hor * speed * Time.deltaTime, 0, 0);
+            audioSource.clip = roll;
+            if (!rollSoundEnable)
+            {
+                Debug.Log("ROLL");
+                audioSource.Play();
+                rollSoundEnable = true;
+            }
+        }
+        else
+        {
+            audioSource.Stop();
+            rollSoundEnable = false;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        audioSource.Play();
+        if (hor==0 && collision.transform.tag == "MovingPlatform")
+        {
+            ballRb.velocity = Vector3.zero;
+        }
+        //audioSource.clip = fall;
+        //audioSource.Play();
     }
 }

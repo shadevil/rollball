@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     private AudioSource audioSource;
     private float hor = 0;
     private bool rollSoundEnable = false;
+    private bool fallSoundEnable = false;
+    private float oldmass;
     [SerializeField] private AudioClip roll;
     [SerializeField] private AudioClip fall;
     private void Start()
@@ -36,24 +38,35 @@ public class Player : MonoBehaviour
             if (!rollSoundEnable)
             {
                 Debug.Log("ROLL");
-                audioSource.Play();
                 rollSoundEnable = true;
             }
         }
         else
         {
-            audioSource.Stop();
             rollSoundEnable = false;
         }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (hor==0 && collision.transform.tag == "MovingPlatform")
+        if (!fallSoundEnable)
+        {
+            Debug.Log("FALL");
+
+            audioSource.clip = fall;
+            fallSoundEnable = true;
+        }
+        else
+        {
+            fallSoundEnable = false;
+        }
+
+        if (hor == 0 && collision.transform.tag == "MovingPlatform")
         {
             ballRb.velocity = Vector3.zero;
+            oldmass = ballRb.mass;
+            ballRb.mass = 5;
         }
-        //audioSource.clip = fall;
-        //audioSource.Play();
+        //else ballRb.mass = oldmass;
     }
 }

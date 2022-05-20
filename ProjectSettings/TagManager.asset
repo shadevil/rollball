@@ -8,6 +8,7 @@ TagManager:
   - DeathZone
   - FallingPlatform
   - Cube
+  - Platform
   layers:
   - Default
   - TransparentFX

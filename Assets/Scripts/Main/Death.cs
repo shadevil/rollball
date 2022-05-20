@@ -23,10 +23,6 @@ public class Death : MonoBehaviour
             other.gameObject.transform.position = other.gameObject.GetComponent<Player>().startPosition;
             IsFall = false;
         }
-        if (other.transform.tag == "FallingPlatform") 
-        {
-            other.transform.position = other.gameObject.GetComponent<Cube>().startPosition;
-        }    
     }
 }
 

@@ -8,65 +8,25 @@ public class Player : MonoBehaviour
     public float speed = 1000f;
     [SerializeField] private Joystick joystick;
     private Rigidbody ballRb;
-    private AudioSource audioSource;
     private float hor = 0;
-    private bool rollSoundEnable = false;
-    private bool fallSoundEnable = false;
-    private float oldmass;
-    [SerializeField] private AudioClip roll;
-    [SerializeField] private AudioClip fall;
+    [SerializeField] private bool IsJoystickEnable;
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
         startPosition = transform.position;
         ballRb = GetComponent<Rigidbody>();
     }
     private void Update()
     {
-        if (Application.platform == RuntimePlatform.WindowsEditor)
+        if (Application.platform == RuntimePlatform.WindowsEditor || !IsJoystickEnable)
         {
             hor = Input.GetAxis("Horizontal");          
         }
-        if (Application.platform == RuntimePlatform.Android) 
+        if (Application.platform == RuntimePlatform.Android || IsJoystickEnable) 
         {
             hor = joystick.Horizontal;
         }
-        if (hor != 0)
-        {
-            ballRb.AddForce(hor * speed * Time.deltaTime, 0, 0);
-            audioSource.clip = roll;
-            if (!rollSoundEnable)
-            {
-                Debug.Log("ROLL");
-                rollSoundEnable = true;
-            }
-        }
-        else
-        {
-            rollSoundEnable = false;
-        }
+        if (hor != 0) ballRb.AddForce(hor * speed * Time.deltaTime, 0, 0);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (!fallSoundEnable)
-        {
-            Debug.Log("FALL");
-
-            audioSource.clip = fall;
-            fallSoundEnable = true;
-        }
-        else
-        {
-            fallSoundEnable = false;
-        }
-
-        if (hor == 0 && collision.transform.tag == "MovingPlatform")
-        {
-            ballRb.velocity = Vector3.zero;
-            oldmass = ballRb.mass;
-            ballRb.mass = 5;
-        }
-        //else ballRb.mass = oldmass;
-    }
+    private void OnCollisionEnter(Collision collision) { if (hor == 0) ballRb.velocity = Vector3.zero; }
 }

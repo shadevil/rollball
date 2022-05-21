@@ -7,13 +7,13 @@ public class Player : MonoBehaviour
     public Vector3 startPosition;
     public float speed = 1000f;
     [SerializeField] private Joystick joystick;
-    private Rigidbody ballRb;
+    private Rigidbody2D ballRb;
     private float hor = 0;
     [SerializeField] private bool IsJoystickEnable;
     private void Start()
     {
         startPosition = transform.position;
-        ballRb = GetComponent<Rigidbody>();
+        ballRb = GetComponent<Rigidbody2D>();
     }
     private void Update()
     {
@@ -25,8 +25,8 @@ public class Player : MonoBehaviour
         {
             hor = joystick.Horizontal;
         }
-        if (hor != 0) ballRb.AddForce(hor * speed * Time.deltaTime, 0, 0);
+        if (hor != 0) ballRb.AddForce(new Vector2(hor * speed * Time.deltaTime, 0));
     }
 
-    private void OnCollisionEnter(Collision collision) { if (hor == 0) ballRb.velocity = Vector3.zero; }
+    private void OnCollisionEnter2D(Collision2D collision){ if (hor == 0) ballRb.velocity = Vector2.zero; }
 }

@@ -5,21 +5,21 @@ using UnityEngine;
 public class Death : MonoBehaviour
 {
     [SerializeField] private GameObject player;
-    private Rigidbody playerRb;
+    private Rigidbody2D playerRb;
     public static bool IsFall = false;
     private Vector3 startPos = new Vector3(-8, 1);
 
     private void Start()
     {
-        playerRb = player.GetComponent<Rigidbody>();
+        playerRb = player.GetComponent<Rigidbody2D>();
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         if (other.transform.tag == "Player")
         {
             IsFall = true;
-            playerRb.velocity = Vector3.zero;
+            playerRb.velocity = Vector2.zero;
             other.gameObject.transform.position = other.gameObject.GetComponent<Player>().startPosition;
             IsFall = false;
         }

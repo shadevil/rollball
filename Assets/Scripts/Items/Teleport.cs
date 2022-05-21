@@ -6,9 +6,10 @@ public class Teleport : MonoBehaviour
 {
     [SerializeField] private GameObject end;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        other.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        Debug.Log("TEST!");
+        other.gameObject.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         other.transform.position = end.transform.position;
     }
 }

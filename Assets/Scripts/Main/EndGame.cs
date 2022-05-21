@@ -5,7 +5,7 @@ using UnityEngine;
 public class EndGame : MonoBehaviour
 {
     [SerializeField] private GameObject gameController;
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         collision.gameObject.SetActive(false);
         gameController.GetComponent<GameController>().gameEnd = true;

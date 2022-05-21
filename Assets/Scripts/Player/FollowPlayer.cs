@@ -5,7 +5,7 @@ using UnityEngine;
 public class FollowPlayer : MonoBehaviour
 {
     [SerializeField] private GameObject Player;
-    private int xOffset = 10;
+    private int xOffset = 15;
     // Start is called before the first frame update
     void Start()
     {

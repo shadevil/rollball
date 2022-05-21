@@ -13,6 +13,14 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject joystick;
     [SerializeField] private Canvas startCanvas;
     [SerializeField] private Canvas endCanvas;
+    private Button startButton;
+    public Button restartButton 
+    {
+        get 
+        {
+            return endCanvas.gameObject.GetComponentInChildren<Button>();
+        }
+    }
     public bool gameEnd = false;
     void Start()
     {
@@ -20,37 +28,33 @@ public class GameController : MonoBehaviour
         endCanvas.gameObject.SetActive(false);
         joystick.SetActive(false);
         player.SetActive(false);
-        Button startButton = startCanvas.gameObject.GetComponentInChildren<Button>();
-        Button restartButton = startCanvas.gameObject.GetComponentInChildren<Button>();
+        startButton = startCanvas.gameObject.GetComponentInChildren<Button>();
         startButton.onClick.AddListener(() => StartGame(startCanvas));
         restartButton.onClick.AddListener(() => StartGame(endCanvas));
         elementsRb = activeElements.GetComponentsInChildren<Rigidbody>();
     }
     private void FreezeGame() 
     {
-        #region Freeze active elements
-        foreach (Rigidbody rb in elementsRb)
-        {
-            rb.isKinematic = true;
-        }
-        #endregion
+        foreach (Rigidbody rb in elementsRb) rb.isKinematic = true; //Freeze active elements
         player.SetActive(false); //Hide player
         joystick.SetActive(false); //Hide joystick
     }
     private void UnfreezeGame() 
     {
-        #region Unfreeze active elements
-        foreach (Rigidbody rb in elementsRb)
-        {
-            rb.isKinematic = false;
-        }
-        #endregion
-        player.SetActive(true); //Hide player
+        gameEnd = false;
+        foreach (Rigidbody rb in elementsRb) rb.isKinematic = false; //Unfreeze active elements
+        player.SetActive(true); //Show player
         player.transform.position =
             player.GetComponent<Player>().startPosition; //Move player to start
         joystick.SetActive(true); //Hide joystick
     }
     private void StartGame(Canvas canvas)
+    {
+        canvas.gameObject.SetActive(false);
+        UnfreezeGame();
+    }
+
+    private void RestartGame(Canvas canvas)
     {
         canvas.gameObject.SetActive(false);
         UnfreezeGame();
